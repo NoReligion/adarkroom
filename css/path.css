@@ -64,5 +64,5 @@ div.perkRow .row_key {
 	top: -10px;
 	max-height: 660px;
 	width: 475px;
-	overflow-y: auto;
+	overflow-y: visible;
 }

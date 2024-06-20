@@ -18,6 +18,16 @@ var Button = {
 					$(this).data("handler")($(this));
 				}
 			})
+            .data("auto_reload", false)
+            .dblclick(function() {
+                var auto = !$(this).data("auto_reload");
+                $(this).data("auto_reload", auto);
+                if (auto) {
+                    $('div.cooldown', $(this)).addClass('auto');
+                } else {
+                    $('div.cooldown', $(this)).removeClass('auto');
+                }
+            })
 			.data("handler",  typeof options.click == 'function' ? options.click : function() { Engine.log("click"); })
 			.data("remaining", 0)
 			.data("cooldown", typeof options.cooldown == 'number' ? options.cooldown : 0)
@@ -106,7 +116,11 @@ var Button = {
 				time /= 2;
 			}
 			$('div.cooldown', btn).width(left * 100 +"%").animate({width: '0%'}, time * 1000, 'linear', function() {
-				Button.clearCooldown(btn, true);
+				var b = $(this).closest('.button');
+				Button.clearCooldown(b, true);
+				if (b.data('auto_reload')) {
+					b.click();
+				}
 			});
 			btn.addClass('disabled');
 			btn.data('onCooldown', true);
